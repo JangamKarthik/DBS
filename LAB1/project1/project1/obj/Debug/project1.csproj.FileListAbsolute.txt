@@ -1,0 +1,10 @@
+D:\210911388\LAB1\project1\project1\bin\Debug\project1.exe.config
+D:\210911388\LAB1\project1\project1\bin\Debug\project1.exe
+D:\210911388\LAB1\project1\project1\bin\Debug\project1.pdb
+D:\210911388\LAB1\project1\project1\obj\Debug\project1.csprojResolveAssemblyReference.cache
+D:\210911388\LAB1\project1\project1\obj\Debug\project1.Form1.resources
+D:\210911388\LAB1\project1\project1\obj\Debug\project1.Properties.Resources.resources
+D:\210911388\LAB1\project1\project1\obj\Debug\project1.csproj.GenerateResource.Cache
+D:\210911388\LAB1\project1\project1\obj\Debug\project1.exe
+D:\210911388\LAB1\project1\project1\obj\Debug\project1.pdb
+D:\210911388\LAB1\project1\project1\obj\Debug\project1.Form2.resources
