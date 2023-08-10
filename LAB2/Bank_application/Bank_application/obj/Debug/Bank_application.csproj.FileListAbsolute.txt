@@ -1,0 +1,11 @@
+D:\210911388\LAB2\Bank_application\Bank_application\bin\Debug\Bank_application.exe.config
+D:\210911388\LAB2\Bank_application\Bank_application\bin\Debug\Bank_application.exe
+D:\210911388\LAB2\Bank_application\Bank_application\bin\Debug\Bank_application.pdb
+D:\210911388\LAB2\Bank_application\Bank_application\obj\Debug\Bank_application.csprojResolveAssemblyReference.cache
+D:\210911388\LAB2\Bank_application\Bank_application\obj\Debug\Bank_application.Form1.resources
+D:\210911388\LAB2\Bank_application\Bank_application\obj\Debug\Bank_application.Form2.resources
+D:\210911388\LAB2\Bank_application\Bank_application\obj\Debug\Bank_application.Form3.resources
+D:\210911388\LAB2\Bank_application\Bank_application\obj\Debug\Bank_application.Properties.Resources.resources
+D:\210911388\LAB2\Bank_application\Bank_application\obj\Debug\Bank_application.csproj.GenerateResource.Cache
+D:\210911388\LAB2\Bank_application\Bank_application\obj\Debug\Bank_application.exe
+D:\210911388\LAB2\Bank_application\Bank_application\obj\Debug\Bank_application.pdb
