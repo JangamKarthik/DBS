@@ -1,0 +1,25 @@
+TOTAL_OWNERS_2023_ACCIDENTS
+7
+
+NUM_ACCIDENTS_INVOLVING_MODEL
+1
+
+OWNER_NAME	No. of Accidents	Total Damage Amount
+x2			1			7500
+x7			1			7000
+x4			1			6000
+x6			1			5500
+x1			1			5000
+x5			1			4000
+x3			1			3000
+
+OWNER_NAME	No. of Accidents
+x2		1
+x5		1
+x6		1
+x3		1
+x7		1
+x1		1
+x4		1
+
+no data found

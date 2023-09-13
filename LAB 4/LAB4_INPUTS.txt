@@ -1,0 +1,40 @@
+SELECT COUNT(DISTINCT driver_id#) AS Total_Owners_2023_Accidents
+FROM (
+    SELECT O.driver_id#
+    FROM OWNS O
+    JOIN CAR C ON O.regno = C.regno
+    JOIN PARTICIPATED PA ON O.regno = PA.regno
+    JOIN ACCIDENT A ON PA.report_number = A.report_number
+    WHERE EXTRACT(YEAR FROM A.accd_date) = 2023
+);
+
+SELECT COUNT(*) AS Num_Accidents_Involving_Model
+FROM PARTICIPATED PA
+JOIN CAR C ON PA.regno = C.regno
+WHERE C.model = 'Toyota Camry';
+
+SELECT P.name AS OWNER_NAME,
+       COUNT(PA.report_number) AS "No. of Accidents",
+       SUM(PA.damage_amount) AS "Total Damage Amount"
+FROM PERSON P
+JOIN OWNS O ON P.driver_id# = O.driver_id#
+JOIN PARTICIPATED PA ON O.regno = PA.regno
+GROUP BY P.driver_id#, P.name
+ORDER BY "Total Damage Amount" DESC;
+
+SELECT P.name AS OWNER_NAME,
+       COUNT(PA.report_number) AS "No. of Accidents"
+FROM PERSON P
+JOIN OWNS O ON P.driver_id# = O.driver_id#
+JOIN PARTICIPATED PA ON O.regno = PA.regno
+JOIN ACCIDENT A ON PA.report_number = A.report_number
+WHERE EXTRACT(YEAR FROM A.accd_date) = 2023
+GROUP BY P.driver_id#, P.name, A.accd_date
+HAVING COUNT(PA.report_number) > 0;
+
+SELECT P.name AS OWNER_NAME
+FROM PERSON P
+LEFT JOIN OWNS O ON P.driver_id# = O.driver_id#
+LEFT JOIN PARTICIPATED PA ON O.regno = PA.regno
+WHERE PA.report_number IS NULL;
+
