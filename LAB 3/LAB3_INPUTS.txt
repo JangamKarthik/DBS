@@ -1,0 +1,99 @@
+CREATE TABLE PERSON (
+    driver_id# varchar(30) PRIMARY KEY,
+    name varchar(50),
+    Address varchar(100)
+);
+
+CREATE TABLE CAR (
+    regno varchar(20) PRIMARY KEY,
+    model varchar(30),
+    Year int
+);
+
+CREATE TABLE ACCIDENT (
+    report_number int PRIMARY KEY,
+    accd_date date,
+    location varchar(50)
+);
+
+CREATE TABLE OWNS (
+    driver_id# varchar(30),
+    regno varchar(20),
+    PRIMARY KEY (driver_id#, regno),
+    FOREIGN KEY (driver_id#) REFERENCES PERSON(driver_id#),
+    FOREIGN KEY (regno) REFERENCES CAR(regno)
+);
+
+CREATE TABLE PARTICIPATED (
+    driver_id# varchar(30),
+    regno varchar(20),
+    report_number int,
+    damage_amount int,
+    PRIMARY KEY (driver_id#, regno, report_number),
+    FOREIGN KEY (driver_id#) REFERENCES PERSON(driver_id#),
+    FOREIGN KEY (regno) REFERENCES CAR(regno),
+    FOREIGN KEY (report_number) REFERENCES ACCIDENT(report_number)
+);
+
+INSERT INTO PERSON VALUES ('D001', 'x1', '123 Main St');
+INSERT INTO PERSON VALUES ('D002', 'x2', '456 Elm St');
+INSERT INTO PERSON VALUES ('D003', 'x3', '789 Oak St');
+INSERT INTO PERSON VALUES ('D004', 'x4', '101 Pine St');
+INSERT INTO PERSON VALUES ('D005', 'x5', '222 Birch St');
+INSERT INTO PERSON VALUES ('D006', 'x6', '333 Cedar St');
+INSERT INTO PERSON VALUES ('D007', 'x7', '444 Maple St');
+
+INSERT INTO CAR VALUES ('ABC123', 'Toyota Camry', 2022);
+INSERT INTO CAR VALUES ('XYZ789', 'Ford Focus', 2021);
+INSERT INTO CAR VALUES ('LMN456', 'Honda Civic', 2023);
+INSERT INTO CAR VALUES ('PQR789', 'Chevrolet Malibu', 2020);
+INSERT INTO CAR VALUES ('JKL321', 'Nissan Altima', 2022);
+INSERT INTO CAR VALUES ('MNO654', 'Hyundai Elantra', 2021);
+INSERT INTO CAR VALUES ('RST987', 'Kia Forte', 2023);
+
+INSERT INTO ACCIDENT VALUES (1, '01-Jan-2023', 'Intersection A');
+INSERT INTO ACCIDENT VALUES (2, '15-Feb-2023', 'Street B');
+INSERT INTO ACCIDENT VALUES (3, '10-Mar-2023', 'Highway C');
+INSERT INTO ACCIDENT VALUES (4, '05-Apr-2023', 'Junction D');
+INSERT INTO ACCIDENT VALUES (5, '20-May-2023', 'Crossing E');
+INSERT INTO ACCIDENT VALUES (6, '15-Jun-2023', 'Roundabout F');
+INSERT INTO ACCIDENT VALUES (7, '25-Jul-2023', 'Freeway G');
+
+INSERT INTO OWNS VALUES ('D001', 'ABC123');
+INSERT INTO OWNS VALUES ('D002', 'XYZ789');
+INSERT INTO OWNS VALUES ('D003', 'LMN456');
+INSERT INTO OWNS VALUES ('D004', 'PQR789');
+INSERT INTO OWNS VALUES ('D005', 'JKL321');
+INSERT INTO OWNS VALUES ('D006', 'MNO654');
+INSERT INTO OWNS VALUES ('D007', 'RST987');
+
+INSERT INTO PARTICIPATED VALUES ('D001', 'ABC123', 1, 5000);
+INSERT INTO PARTICIPATED VALUES ('D002', 'XYZ789', 2, 7500);
+INSERT INTO PARTICIPATED VALUES ('D003', 'LMN456', 3, 3000);
+INSERT INTO PARTICIPATED VALUES ('D004', 'PQR789', 4, 6000);
+INSERT INTO PARTICIPATED VALUES ('D005', 'JKL321', 5, 4000);
+INSERT INTO PARTICIPATED VALUES ('D006', 'MNO654', 6, 5500);
+INSERT INTO PARTICIPATED VALUES ('D007', 'RST987', 7, 7000);
+
+UPDATE PARTICIPATED
+SET damage_amount = 25000
+WHERE regno = 'ABC123' AND report_number = 1;
+
+DELETE FROM PARTICIPATED
+WHERE report_number IN (
+    SELECT report_number
+    FROM ACCIDENT
+    WHERE EXTRACT(YEAR FROM accd_date) = 2023
+);
+
+DELETE FROM ACCIDENT
+WHERE EXTRACT(YEAR FROM accd_date) = 2023;
+
+ALTER TABLE CAR
+ADD color varchar(20);
+
+ALTER TABLE CAR
+DROP COLUMN color;
+
+ALTER TABLE PARTICIPATED
+ADD CONSTRAINT CHK_damage_amount CHECK (damage_amount > 0);
