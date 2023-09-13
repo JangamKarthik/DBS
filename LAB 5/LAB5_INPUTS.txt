@@ -1,0 +1,172 @@
+CREATE TABLE STUDENT (
+    regno varchar(20) PRIMARY KEY,
+    name varchar(50),
+    major varchar(20),
+    bdate date
+);
+
+CREATE TABLE COURSE (
+    course# int PRIMARY KEY,
+    cname varchar(30),
+    dept varchar(30)
+);
+
+CREATE TABLE ENROLL (
+    regno varchar(20),
+    course# int,
+    PRIMARY KEY (regno, course#),
+    FOREIGN KEY (regno) REFERENCES STUDENT(regno),
+    FOREIGN KEY (course#) REFERENCES COURSE(course#)
+);
+
+CREATE TABLE BOOK_ADOPTION (
+    course# int,
+    sem int,
+    book_isbn int,
+    PRIMARY KEY (course#, sem, book_isbn),
+    FOREIGN KEY (course#) REFERENCES COURSE(course#)
+);
+
+CREATE TABLE TEXT (
+    book_isbn int PRIMARY KEY,
+    booktitle varchar(50),
+    publisher varchar(50),
+    author varchar(50)
+);
+
+INSERT INTO STUDENT VALUES ('S001', 'X1', 'Information Tech', TO_DATE('1999-05-15', 'YYYY-MM-DD'));
+INSERT INTO STUDENT VALUES ('S002', 'X2', 'Physics', TO_DATE('2000-03-20', 'YYYY-MM-DD'));
+INSERT INTO STUDENT VALUES ('S003', 'X3', 'Mathematics', TO_DATE('1998-07-10', 'YYYY-MM-DD'));
+INSERT INTO STUDENT VALUES ('S004', 'X4', 'Chemistry', TO_DATE('2001-01-25', 'YYYY-MM-DD'));
+INSERT INTO STUDENT VALUES ('S005', 'X4', 'Biology', TO_DATE('2002-09-05', 'YYYY-MM-DD'));
+
+
+INSERT INTO COURSE VALUES (101, 'Database Management', 'Information Technology');
+INSERT INTO COURSE VALUES (201, 'Calculus I', 'Mathematics');
+INSERT INTO COURSE VALUES (301, 'Physics II', 'Physics');
+INSERT INTO COURSE VALUES (401, 'Organic Chemistry', 'Chemistry');
+INSERT INTO COURSE VALUES (501, 'Genetics', 'Biology');
+
+INSERT INTO ENROLL VALUES ('S001', 101);
+INSERT INTO ENROLL VALUES ('S002', 201);
+INSERT INTO ENROLL VALUES ('S002', 301);
+INSERT INTO ENROLL VALUES ('S003', 201);
+INSERT INTO ENROLL VALUES ('S004', 401);
+
+INSERT INTO BOOK_ADOPTION VALUES (101, 1, 1001);
+INSERT INTO BOOK_ADOPTION VALUES (201, 1, 1002);
+INSERT INTO BOOK_ADOPTION VALUES (301, 2, 1003);
+INSERT INTO BOOK_ADOPTION VALUES (401, 2, 1004);
+INSERT INTO BOOK_ADOPTION VALUES (501, 1, 1005);
+
+INSERT INTO TEXT VALUES (1001, 'Database Fundamentals', 'Pearson', 'Auth1');
+INSERT INTO TEXT VALUES (1002, 'Calculus: Early Transcendentals', 'Wiley', 'Auth2');
+INSERT INTO TEXT VALUES (1003, 'Physics for Scientists and Engineers', 'Cengage', 'Auth3');
+INSERT INTO TEXT VALUES (1004, 'Organic Chemistry', 'McGraw-Hill', 'Auth4');
+INSERT INTO TEXT VALUES (1005, 'Genetics: Analysis and Principles', 'Pearson', 'Auth5');
+
+SELECT course# 
+FROM BOOK_ADOPTION
+GROUP BY course#
+HAVING COUNT(book_isbn) > 0;
+
+SELECT DISTINCT C.dept
+FROM COURSE C
+WHERE NOT EXISTS (
+    SELECT *
+    FROM BOOK_ADOPTION BA
+    WHERE BA.course# = C.course#
+    AND BA.book_isbn NOT IN (
+        SELECT T.book_isbn
+        FROM TEXT T
+        WHERE T.publisher = 'Pearson'
+    )
+);
+
+SELECT regno, name
+FROM STUDENT S
+WHERE (
+    SELECT COUNT(DISTINCT C.dept)
+    FROM ENROLL E
+    JOIN COURSE C ON E.course# = C.course#
+    WHERE E.regno = S.regno
+) > 1;
+
+SELECT S.regno, S.name
+FROM STUDENT S
+WHERE NOT EXISTS (
+    SELECT *
+    FROM ENROLL E
+    WHERE E.regno = S.regno
+);
+
+SELECT DISTINCT T.booktitle
+FROM TEXT T
+JOIN BOOK_ADOPTION BA ON T.book_isbn = BA.book_isbn
+JOIN COURSE C ON BA.course# = C.course#
+JOIN ENROLL E ON C.course# = E.course#
+
+SELECT DISTINCT C.course#
+FROM COURSE C
+WHERE (
+    SELECT COUNT(DISTINCT T.publisher)
+    FROM BOOK_ADOPTION BA
+    JOIN TEXT T ON BA.book_isbn = T.book_isbn
+    WHERE BA.course# = C.course#
+    AND T.publisher = 'Pearson'
+) >= 2;
+
+SELECT regno 
+FROM ENROLL
+NATURAL JOIN BOOK_ADOPTION 
+GROUP BY ENROLL.regno 
+HAVING COUNT(BOOK_ISBN) >= ALL 
+(
+    SELECT COUNT(BOOK_ISBN) 
+    FROM ENROLL
+    NATURAL JOIN BOOK_ADOPTION 
+    GROUP BY ENROLL.regno
+);
+
+SELECT publisher, COUNT(book_isbn) AS "Number of Books Published"
+FROM TEXT
+GROUP BY publisher;
+
+SELECT S.regno, S.name
+FROM STUDENT S
+WHERE (
+    SELECT COUNT(DISTINCT C.course#)
+    FROM ENROLL E
+    JOIN COURSE C ON E.course# = C.course#
+    WHERE E.regno = S.regno
+) = (
+    SELECT COUNT(DISTINCT C.course#)
+    FROM ENROLL E
+    JOIN COURSE C ON E.course# = C.course#
+    JOIN BOOK_ADOPTION BA ON C.course# = BA.course#
+    JOIN TEXT T ON BA.book_isbn = T.book_isbn
+    WHERE E.regno = S.regno
+);
+
+--view to count enrolled cources for each student
+CREATE VIEW EnrolledCourseCount AS
+SELECT E.regno, COUNT(DISTINCT C.course#) AS EnrolledCourseCount
+FROM ENROLL E
+JOIN COURSE C ON E.course# = C.course#
+GROUP BY E.regno;
+
+--view to count courses that adopt books for each student
+CREATE VIEW CoursesWithBooks AS
+SELECT E.regno, COUNT(DISTINCT C.course#) AS CoursesWithBooksCount
+FROM ENROLL E
+JOIN COURSE C ON E.course# = C.course#
+JOIN BOOK_ADOPTION BA ON C.course# = BA.course#
+JOIN TEXT T ON BA.book_isbn = T.book_isbn
+GROUP BY E.regno;
+
+--query:
+SELECT S.regno, S.name
+FROM STUDENT S
+JOIN EnrolledCourseCount ECC ON S.regno = ECC.regno
+JOIN CoursesWithBooks CWB ON S.regno = CWB.regno
+WHERE ECC.EnrolledCourseCount = CWB.CoursesWithBooksCount;

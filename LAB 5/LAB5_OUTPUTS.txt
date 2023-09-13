@@ -1,0 +1,111 @@
+Table created.
+
+Table created.
+
+Table created.
+
+Table created.
+
+Table created.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+1 row(s) inserted.
+
+COURSE#
+101
+201
+301
+401
+501
+
+DEPT
+Information Technology
+Biology
+
+REGNO	NAME
+S002	X2
+
+REGNO	NAME
+S005	X4
+
+BOOKTITLE
+Calculus: Early Transcendentals
+Organic Chemistry
+Physics for Scientists and Engineers
+Database Fundamentals
+
+no data found
+
+REGNO
+S002
+
+PUBLISHER	Number of Books Published
+Wiley		1
+Cengage		1
+Pearson		2
+McGraw-Hill	1
+
+REGNO	NAME
+S001	X1
+S002	X2
+S003	X3
+S004	X4
+S005	X4
+
+View created.
+
+View created.
+
+Result Set 6
+REGNO	NAME
+S001	X1
+S002	X2
+S003	X3
+S004	X4
